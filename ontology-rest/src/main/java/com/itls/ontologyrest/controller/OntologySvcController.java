@@ -21,13 +21,6 @@ public class OntologySvcController {
         return ontologyService.getCustomerCSV();
     }
 
-    @RequestMapping(value = "/getRecordsBySSN")
-    public String getCustomerBySSN(@RequestParam(value = "SSN", required = false) String SSN) {
-        if (SSN != null) {
-            return ontologyService.getHEBJSON(SSN);
-        } else
-            return "";
-    }
 
     @RequestMapping("/heb")
     public String getHEBJSON() {

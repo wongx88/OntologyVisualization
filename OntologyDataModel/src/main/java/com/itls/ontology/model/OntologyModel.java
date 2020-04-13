@@ -53,26 +53,14 @@ public class OntologyModel {
     }
 
     public ArrayList<OntData> getKeys() {
-        keyList = dataSet.stream()
-                .filter(OntData::isKey)
-                .collect(Collectors.toCollection(ArrayList::new));
-        return keyList;
-    }
-
-    public ArrayList<OntData> filterByKey(String key) {
-        keyList = dataSet.stream()
-                .filter(ontData -> ontData.getKeyValue()
-                        .equals(key))
-                .collect(Collectors.toCollection(ArrayList::new));
+        keyList = dataSet.stream().filter(OntData::isKey).collect(Collectors.toCollection(ArrayList::new));
         return keyList;
     }
 
     public void refreshKeyMDs() {
         getDataSet()
-                .forEach(ontData -> ontData.getOntMetaData()
-                        .setKey(getKeyMD()));
+                .forEach(ontData -> ontData.getOntMetaData().setKey(getKeyMD()));
     }
-
 
     public Map<String, List<OntData>> getDataMap() {
         return dataMap;

@@ -61,12 +61,6 @@ public class OntologyService implements IOntologyService {
         // ontologyModel = getOntologyModel();
     }
 
-//
-//    public getCustomerbySSN(String SSN){
-//        ontologyModel.getDataSet().forEach();
-//        return ontologyModel.toFDGJSON(true);
-//    }
-
 
     public String getCustomerCSV() {
         StringBuilder contentBuilder = new StringBuilder();
@@ -74,8 +68,7 @@ public class OntologyService implements IOntologyService {
 
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
-                contentBuilder.append(sCurrentLine)
-                        .append("\n");
+                contentBuilder.append(sCurrentLine).append("\n");
             }
         } catch (IOException e) {
             logger.error(e.getLocalizedMessage());
@@ -92,17 +85,6 @@ public class OntologyService implements IOntologyService {
         OntologyModel model = ontologyModel;
         String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age", "Marital Status", "Residential_Street Address", "Item", "Propensity"};
         //  String[] showList = {"SSN","First Name","Last Name","Item"};
-        model.showMMD(Arrays.asList(showList));
-        model.deduplicateDataset();
-        return model.toHEBJSON();
-    }
-
-    public String getHEBJSON(String SSN) {
-        if (null == ontologyModel) return EMPTY_JSON;
-        OntologyModel model = new OntologyModel();
-        model.hideAllMMD();
-        model.addAllOntData(ontologyModel.filterByKey(SSN));
-        String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age", "Marital Status", "Residential_Street Address", "Item", "Propensity"};
         model.showMMD(Arrays.asList(showList));
         model.deduplicateDataset();
         return model.toHEBJSON();

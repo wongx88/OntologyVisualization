@@ -1,6 +1,5 @@
 var EdgeBundling = (function () {
 
-
     function EdgeBundling(data, elem, width = 975, height = 610, radius = 477) {
         this.width = width;
         this.height = height;
@@ -15,13 +14,6 @@ var EdgeBundling = (function () {
 
     EdgeBundling.prototype.init = function () {
         var self = this;
-        $("body").append($("<p>\n" +
-            "    <form action=\"getRecordsBySSN\" method=\"POST\">\n" +
-            "        SSN: <input type=\"text\" name=\"SSN\"/>\n" +
-            "        <input type=\"submit\" value=\"submit\"/>\n" +
-            "        </form>\n" +
-            "        </p> "));
-
         //975 610
         self.svg = d3.create("svg")
             .attr("viewBox", [-self.width / 2, -self.width / 2, self.width, self.width]);
