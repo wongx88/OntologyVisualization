@@ -11,8 +11,14 @@ var ForceDirected = (function () {
         var self = this;
         //975 610
         self.svg = d3.create("svg").attr("viewBox", [0, 0, this.width, this.height]).attr("class", 'ForceDirected');
-        //append link array
 
+        //zoom
+        self.svg.call(d3.zoom()
+            .extent([[0, 0], [this.width, this.height]])
+            .scaleExtent([1, 8])
+            .on("zoom", zoomed));
+
+        //append link array
         self.link = self.svg.append("g")
             .attr("class", "links")
             .selectAll(".link")
@@ -24,6 +30,10 @@ var ForceDirected = (function () {
             .attr("class", "nodes")
             .selectAll(".node")
 
+        function zoomed() {
+            self.svg.select(".nodes").attr("transform", d3.event.transform);
+            self.svg.select(".links").attr("transform", d3.event.transform);
+        }
 
         self.color = d3.scaleOrdinal(d3.schemeCategory10).domain(["2", "1", "3", "4"]);
 
@@ -49,6 +59,7 @@ var ForceDirected = (function () {
             );
         document.body.append(self.svg.node());
     };
+
 
     ForceDirected.prototype.drawGraphs = function () {
         var self = this;
