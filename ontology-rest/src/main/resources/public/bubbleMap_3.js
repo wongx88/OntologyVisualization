@@ -43,7 +43,7 @@ var BubbleMap_3 = (function () {
             .attr("text-anchor", "middle")
             .style("font", "10px sans-serif")
             .selectAll("g")
-            .data([1e2, 5e2, 1e3, 1.5e3, 2e3])  //controls the scale circles
+            .data([1, 3, 6, 9, 12, 15])  //controls the scale circles
             .join("g");
 
         // self.data = new Map((await d3.json("https://gist.githubusercontent.com/mbostock/5ff33e1f3a3f9d6b1b38c8a79df86377/raw/0d71e5d21c9e44fed63b41c2e8b2f28ffd133213/population.json")).slice(1).map(([population, state, county]) => [state + county, +population]));
