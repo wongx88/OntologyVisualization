@@ -76,7 +76,8 @@ public abstract class OntData {
 
 
     public boolean isKey() {
-        return this.getKey().equals(this.getOntMetaData());
+        return this.getKey()
+                .equals(this.getOntMetaData());
     }
 
     public OntMetaData belongsTo(OntMetaData ontMetaData) {
@@ -150,11 +151,19 @@ public abstract class OntData {
     private String lookupKeyValue() {
         if (getOntMetaData() != null) {
             OntMetaData md = getOntMetaData();
-            if (md.getName().equals(md.getKey().getName())) {
+            if (md.getName()
+                    .equals(md.getKey()
+                            .getName())) {
                 return getContents();
             }
-            Optional<OntData> result = getRelatesToObjs().stream().filter(ontData -> ontData.getOntMetaData().getName().equals(md.getKey().getName())).findAny();
-            return result.get().getContents();
+            Optional<OntData> result = getRelatesToObjs().stream()
+                    .filter(ontData -> ontData.getOntMetaData()
+                            .getName()
+                            .equals(md.getKey()
+                                    .getName()))
+                    .findAny();
+            return result.get()
+                    .getContents();
         } else
             return null;
     }
@@ -168,14 +177,19 @@ public abstract class OntData {
             return false;
         } else {
             od = (OntData) o;
-            if (this.getContents().equals(od.getContents())) {
+            if (this.getContents()
+                    .equals(od.getContents())) {
                 if (this.getOntMetaData() == null || od.getOntMetaData() == null)
                     return true;
-                else if (this.getOntMetaData().getName().equals(od.getOntMetaData().getName())) {
+                else if (this.getOntMetaData()
+                        .getName()
+                        .equals(od.getOntMetaData()
+                                .getName())) {
                     if (this.getKey() == null || od.getKey() == null) {
                         return true;
                     } else
-                        return this.getKey().equals(od.getKey());
+                        return this.getKey()
+                                .equals(od.getKey());
                 }
             }
         }
