@@ -31,8 +31,15 @@ var ForceDirected = (function () {
             .selectAll(".node")
 
         function zoomed() {
+            ticked();
+
+        }
+
+        function ticked() {
             self.svg.select(".nodes").attr("transform", d3.event.transform);
             self.svg.select(".links").attr("transform", d3.event.transform);
+            self.svg.selectAll(".edgepath").attr("transform", d3.event.transform);
+            self.svg.selectAll("textPath").attr("transform", "scale(" + d3.event.transform.k + ")");
         }
 
         self.color = d3.scaleOrdinal(d3.schemeCategory10).domain(["2", "1", "3", "4"]);
@@ -190,12 +197,14 @@ var ForceDirected = (function () {
                 .attr('id', function (d, i) {
                     return 'edgelabel' + i
                 })
-                .attr('font-size', 10)
-                .attr('fill', '#000000')
                 .append('textPath')
                 .attr('xlink:href', function (d, i) {
                     return '#edgepath' + i
                 })
+                .attr('font-size', 10)
+                .attr('fill', '#000000')
+                .style("text-anchor", "middle")
+                .attr("startOffset", "50%")
                 .style("pointer-events", "none")
                 .text(function (d, i) {
                     return d.score
