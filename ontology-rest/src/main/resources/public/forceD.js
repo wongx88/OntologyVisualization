@@ -23,22 +23,20 @@ var ForceDirected = (function () {
             .attr("class", "links")
             .selectAll(".link")
 
-        self.path = self.svg
+        self.path = self.svg.append("g")
+            .attr("class", "edgepaths")
             .selectAll(".edgepath")
+
+        self.label = self.svg.select(".edgepaths")
 
         self.node = self.svg.append("g")
             .attr("class", "nodes")
             .selectAll(".node")
 
         function zoomed() {
-            ticked();
-
-        }
-
-        function ticked() {
             self.svg.select(".nodes").attr("transform", d3.event.transform);
             self.svg.select(".links").attr("transform", d3.event.transform);
-            self.svg.selectAll(".edgepath").attr("transform", d3.event.transform);
+            self.svg.select(".edgepaths").attr("transform", d3.event.transform);
             self.svg.selectAll("textPath").attr("transform", "scale(" + d3.event.transform.k + ")");
         }
 
@@ -47,14 +45,11 @@ var ForceDirected = (function () {
         self.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(function (d) {
                     return d.id;
+                }).distance(function (d) {
+                    return d.score == null ? 20 : d.score * 100;
                 })
-                    // .distance(10)
                     .strength(2)
             )
-
-            //     .distance(function(d) {
-            //     return d.value;
-            // }).strength(0.2)
             .force("charge", d3.forceManyBody()
                 .strength(function (d) {
                     return 1;
@@ -169,7 +164,7 @@ var ForceDirected = (function () {
                     return Math.sqrt(d.score * 100);
                 });
 
-            self.edgepaths = self.svg.selectAll(".edgepath")
+            self.edgepaths = self.path
                 .data(g.links.filter(function (d) {
                     return d.type == 2;
                 }))
@@ -185,7 +180,8 @@ var ForceDirected = (function () {
                 .data(g.links.filter(function (d) {
                     return d.type == 2;
                 })).exit().remove();
-            self.edgelabels = self.svg.selectAll(".edgelabel")
+
+            self.edgelabels = self.label.selectAll(".edgelabel")
                 .data(g.links.filter(function (d) {
                     return d.type == 2;
                 }));
@@ -408,7 +404,6 @@ var ForceDirected = (function () {
                 .attr("d", function (d) {
                     return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y
                 });
-
 
             self.node
                 .attr("transform", function (d) {
