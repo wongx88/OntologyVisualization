@@ -3,6 +3,7 @@ package com.itls.ontologyrest.controller;
 import com.itls.ontologyrest.service.OntologyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +22,15 @@ public class OntologySvcController {
         return ontologyService.getCustomerCSV();
     }
 
+    @RequestMapping(value = "/getRecordsBySSN")
+    public String getRecordsBySSN(@RequestParam(value = "SSN", required = false) String SSN) {
+        if (SSN != null) {
+            return ontologyService.getHEBJSON(SSN);
+        } else
+            return "";
+    }
 
-    @RequestMapping("/heb")
+    @RequestMapping(value = "/heb", method = {RequestMethod.GET, RequestMethod.POST})
     public String getHEBJSON() {
         return ontologyService.getHEBJSON();
     }

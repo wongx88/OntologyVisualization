@@ -53,14 +53,33 @@ public class OntologyModel {
     }
 
     public ArrayList<OntData> getKeys() {
-        keyList = dataSet.stream().filter(OntData::isKey).collect(Collectors.toCollection(ArrayList::new));
+        keyList = dataSet.stream()
+                .filter(OntData::isKey)
+                .collect(Collectors.toCollection(ArrayList::new));
+        return keyList;
+    }
+
+    public ArrayList<OntData> filterByKey(String key) {
+        keyList = dataSet.stream()
+                .filter(ontData -> ontData.getKeyValue()
+                        .equals(key))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return keyList;
+    }
+
+    public ArrayList<OntData> filterByKeys(Set<String> keys) {
+        keyList = dataSet.stream()
+                .filter(ontData -> keys.contains(ontData.getKeyValue()))
+                .collect(Collectors.toCollection(ArrayList::new));
         return keyList;
     }
 
     public void refreshKeyMDs() {
         getDataSet()
-                .forEach(ontData -> ontData.getOntMetaData().setKey(getKeyMD()));
+                .forEach(ontData -> ontData.getOntMetaData()
+                        .setKey(getKeyMD()));
     }
+
 
     public Map<String, List<OntData>> getDataMap() {
         return dataMap;
@@ -129,13 +148,13 @@ public class OntologyModel {
      */
     public void refreshKeysNValues() {
         List<OntData> keys = getKeys();
-        logger.info("After Key refreshment: keys are " + keys);
         //build keys, relatesTo objects for combined model
         //find matching key entries and populate both ways, then deduplicate the entire dataset
         HashMap<String, ArrayList<OntData>> keysMap = keys.stream().collect(
                 Collectors.groupingBy(OntData::getContents, HashMap::new, Collectors.toCollection(ArrayList::new)));
+        logger.info("Entering Key refreshment for following key set: keys are " + keysMap.keySet());
         keysMap.forEach((String a, ArrayList<OntData> b) -> relatesData(b));
-
+        logger.info("Exiting Key refreshment");
     }
 
     /**
@@ -167,6 +186,7 @@ public class OntologyModel {
             setDataSet((ArrayList<OntData>) re);
             //getDataSet().stream().distinct().forEach(x-> logger.info(x.getContents() + " " + x.getKeyValue()));
         }
+        logger.info("Deduplication ends");
     }
 
     public void deduplicateDataset() {
@@ -175,7 +195,7 @@ public class OntologyModel {
         //A->B,C,D
         //A->C,D,E
         //return A -> B,C,D,E
-        //  refreshKeysNValues();
+        //refreshKeysNValues();
         if (getDataSet() != null) {
             List<OntData> re = getDataSet().stream()
                     //dudup based on key + metadata + value
@@ -190,6 +210,7 @@ public class OntologyModel {
 
             //getDataSet().stream().distinct().forEach(x-> logger.info(x.getContents() + " " + x.getKeyValue()));
         }
+        logger.info("Deduplication ends");
     }
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
@@ -234,20 +255,31 @@ public class OntologyModel {
         //should not flatALl, as we are not re-associating the original relatesTo data again
         //[577-48-3829, 577-48-3829, 577-48-3829, 577-48-3829]
         // List<OntData> flattenList = aList.stream().flatMap(ontData -> ontData.getRelatesToObjs().stream()).collect(Collectors.toList());
-        for (int i = 0; i < aList.size(); i++) {
-            for (int j = i + 1; j < aList.size(); j++) {
-                ArrayList<OntData> a = new ArrayList<>();
-                a.add(aList.get(i));
-                ArrayList<OntData> b = new ArrayList<>(aList.get(i).getRelatesToObjs());
-                ArrayList<OntData> c = new ArrayList<>();
-                c.add(aList.get(j));
-                ArrayList<OntData> d = new ArrayList<>(aList.get(j).getRelatesToObjs());
-                relatesRelatesToDataFromPair(a, d);
-                relatesRelatesToDataFromPair(c, b);
-                relatesRelatesToDataFromPair(b, d);
-            }
-        }
-        System.out.println(aList);
+//        for (int i = 0; i < aList.size(); i++) {
+//            for (int j = i + 1; j < aList.size(); j++) {
+//                ArrayList<OntData> a = new ArrayList<>();
+//                OntData keyOntData1 = aList.get(i);
+//                a.add(keyOntData1);
+//
+//                ArrayList<OntData> b = new ArrayList<>(keyOntData1
+//                        .getRelatesToObjs());
+//                ArrayList<OntData> c = new ArrayList<>();
+//                c.add(aList.get(j));
+//                ArrayList<OntData> d = new ArrayList<>(aList.get(j).getRelatesToObjs());
+//                relatesRelatesToDataFromPair(a, d);
+//                relatesRelatesToDataFromPair(c, b);
+//                relatesRelatesToDataFromPair(b, d);
+//            }
+//        }
+        ArrayList<OntData> newList = new ArrayList<>();
+        aList.stream()
+                .forEach(ontData -> {
+                    newList.add(ontData);
+                    ontData.getRelatesToObjs()
+                            .forEach(ontData1 -> newList.add(ontData1));
+                });
+        newList.forEach(OntData::removeAllRelatesToData);
+        relatesRelatesToData(newList);
 //         aList.stream().forEach(ontData -> aList.stream()
 //                                .filter(innered -> !(innered == ontData))
 //                                .forEach(innerd -> {ArrayList<OntData> a = new ArrayList<>();
