@@ -18,13 +18,13 @@ var renderPage = function (type) {
         new EdgeBundling();
     } else if (type == "HeatMap#1") {
         new BubbleMap();
-        $("body").append($("<div><h1>Group By Amount</h1></div>"));
+        $(".title").append($("<h1>Group By Amount</h1>"));
     } else if (type == "HeatMap#2") {
         new BubbleMap_2();
-        $("body").append($("<div><h1>Group By Household Size</h1></div>"));
+        $(".title").append($("<h1>Group By Household Size</h1>"));
     } else if (type == "HeatMap#3") {
         new BubbleMap_3();
-        $("body").append($("<div><h1>Group By total number of Transaction</h1></div>"));
+        $(".title").append($("<h1>Group By total number of Transaction</h1>"));
     } else
         new CirclePacking();
 };
@@ -32,16 +32,49 @@ var renderPage = function (type) {
 
 // window.onload = draw;
 $(document).ready(function () {
-    $("input[id='visual-1']").click(function () {
+    d3.select("body")
+        .append("div")
+        .attr("class", "title")
+    $("input[id='visual-1']").click(function (e) {
+        e.preventDefault();
+        $("#visual-1").attr("disabled", true);
         var radioValue = $("input[name='vis']:checked").val();
         if (radioValue) {
-            $("#header").animate({
-                opacity: 0.25,
-                height: "toggle"
-            }, 3000, function () {
+            $("#header").fadeToggle(1000, function () {
+                d3.select("body")
+                    .append("div")
+                    .attr("class", "button-set");
+                var cancel = d3.select(".button-set")
+                    .append("input")
+                    .attr("type", "button")
+                    .attr("value", "Cancel")
+                    .on("click", function () {
+                        $("#visual-1").attr("disabled", false);
+                        $("#header").fadeToggle({
+                            opacity: 1,
+                            height: "toggle"
+                        }, 1000, function () {
+                        });
+                        $("svg").animate({
+                            height: "toggle"
+                        }, 1000, function () {
+                            $("svg").remove();
+                        });
+                        $(".button-set").fadeToggle(1000, function () {
+                            $(".button-set").remove();
+                        });
+                        $('.field').fadeToggle(1000, function () {
+                            $(".field").remove();
+                        });
+                        $('h1').fadeToggle(1000, function () {
+                            $("h1").remove();
+                        });
+
+                    })
                 // Animation complete.
+                renderPage(radioValue);
             });
-            renderPage(radioValue)
+
         }
     });
 });

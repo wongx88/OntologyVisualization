@@ -1,0 +1,206 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body h1 {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Andada', serif;
+    font-weight: 500;
+    border-bottom: 2px solid #1976D2;
+    color: #BBDEFB;
+    background: transparent;
+    text-align: center;
+}
+
+body label {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Andada', serif;
+    font-weight: 500;
+    color: #BBDEFB;
+    background: transparent;
+    text-align: center;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    outline: none;
+}
+
+body {
+    background: -webkit-gradient(linear, left top, left bottom, from(#639EDB), to(#0668CF)) no-repeat;
+    background: linear-gradient(to bottom, #639EDB, #0668CF) no-repeat;
+    font-family: 'Arimo', sans-serif;
+    background-size: 100%;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.button-set {
+    bottom: 20px;
+    position: absolute;
+}
+
+p {
+    text-align: center;
+    color: #ffffff;
+    font-size: 13px;
+}
+
+a:hover, a:visited, a:hover, a:link {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.register {
+    margin: 0 auto 0;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.field {
+    width: 385px;
+    height: 70px;
+    position: relative;
+}
+
+.field input[type="text"] {
+    width: 100%;
+    border-radius: 6px;
+    height: 70px;
+    border: 0;
+    padding: 10px;
+    padding: 20px 0 0 16px;
+    font-size: 0;
+    background: #1566BB;
+    -webkit-transition: background .3s ease;
+    transition: background .3s ease;
+    color: #ffffff;
+}
+
+.field input[type="text"]:focus {
+    background: #065CB7;
+    font-size: 23px;
+}
+
+.field input[type="text"]:focus::-moz-selection {
+    background: rgba(188, 232, 255, 0.5);
+}
+
+.field input[type="text"]:focus::selection {
+    background: rgba(188, 232, 255, 0.5);
+}
+
+.field input[type="text"].active {
+    background: #065CB7;
+    font-size: 23px;
+}
+
+.field input,
+.field input[type="submit"] {
+    position: absolute;
+    height: 70px;
+}
+
+.field input[type="submit"] {
+    background: rgba(0, 0, 0, 0.3);
+    right: 0;
+    border: 0;
+    width: 115px;
+    border-radius: 6px;
+    font-size: 22px;
+    cursor: pointer;
+    -webkit-transition: width .3s ease, background .3s ease, opacity .3s ease;
+    transition: width .3s ease, background .3s ease, opacity .3s ease;
+    opacity: 0;
+    color: #065CB7;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+input[type="button"] {
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.25);
+    padding: 10px 5px;
+    width: 95%;
+    display: inline-block;
+    border: 0;
+    border-radius: 20px;
+    font-size: 15px;
+    padding: 7px 9px;
+    cursor: pointer;
+    -webkit-transition: width .3s ease, background .3s ease, opacity .3s ease;
+    transition: width .3s ease, background .3s ease, opacity .3s ease;
+    opacity: 0;
+    color: #ffffff;
+    background: #2f7ed1;
+    opacity: 1;
+    text-transform: uppercase;
+    pointer-events: auto;
+}
+
+.field input[type="submit"].active {
+    color: #ffffff;
+    background: #639EDB;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+input[type="button"]:hover, .field input[type="submit"].active:hover {
+    background: #5E99D6;
+}
+
+.field input[type="submit"].full {
+    width: 100%;
+}
+
+.field input[type="text"]:focus + label {
+    font-size: 19px;
+    -webkit-transform: translate(16px, 11px);
+    transform: translate(16px, 11px);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.field label {
+    position: absolute;
+    color: white;
+    -webkit-transform: translate(16px, 20px);
+    transform: translate(16px, 20px);
+    -webkit-transition: font-size .3s ease, color .3s .1s ease, -webkit-transform .3s ease;
+    transition: font-size .3s ease, color .3s .1s ease, -webkit-transform .3s ease;
+    transition: transform .3s ease, font-size .3s ease, color .3s .1s ease;
+    transition: transform .3s ease, font-size .3s ease, color .3s .1s ease, -webkit-transform .3s ease;
+    font-size: 28px;
+}
+
+.field label.active {
+    font-size: 19px;
+    -webkit-transform: translate(16px, 11px);
+    transform: translate(16px, 11px);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.field input[type="text"]:focus + label + button {
+    opacity: 1;
+}

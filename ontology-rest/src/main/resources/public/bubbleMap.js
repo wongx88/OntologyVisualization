@@ -27,7 +27,7 @@ var BubbleMap = (function () {
 
         self.svg.append("path")
             .datum(topojson.feature(self.topology, self.topology.objects.nation))
-            .attr("fill", "#ccc")
+            .attr("fill", "#BBDEFB")
             .attr("d", self.path);
 
         self.svg.append("path")
@@ -38,12 +38,12 @@ var BubbleMap = (function () {
             .attr("d", self.path);
 
         const legend = self.svg.append("g")
-            .attr("fill", "#777")
+            .attr("fill", "#f09b00")
             .attr("transform", "translate(925,608)")
             .attr("text-anchor", "middle")
             .style("font", "10px sans-serif")
             .selectAll("g")
-            .data([1e3, 5e3, 1e4, 1.5e4, 2e4])  //controls the scale circles
+            .data([1e5, 1.5e5, 2e5, 3e5, 5e5])  //controls the scale circles
             .join("g");
 
         // self.data = new Map((await d3.json("https://gist.githubusercontent.com/mbostock/5ff33e1f3a3f9d6b1b38c8a79df86377/raw/0d71e5d21c9e44fed63b41c2e8b2f28ffd133213/population.json")).slice(1).map(([population, state, county]) => [state + county, +population]));
@@ -73,7 +73,7 @@ var BubbleMap = (function () {
             self.svg.append("g")
                 .attr("fill", "brown")
                 .attr("fill-opacity", 0.5)
-                .attr("stroke", "#fff")
+                .attr("fill", "#f09b00")
                 .attr("stroke-width", 0.5)
                 .selectAll("circle")
                 .data(

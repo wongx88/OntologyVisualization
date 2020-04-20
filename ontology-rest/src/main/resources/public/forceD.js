@@ -1,3 +1,4 @@
+
 var ForceDirected = (function () {
     function ForceDirected(width = 975, height = 610, radius = 5) {
         this.width = width;
@@ -40,7 +41,7 @@ var ForceDirected = (function () {
             self.svg.selectAll("textPath").attr("transform", "scale(" + d3.event.transform.k + ")");
         }
 
-        self.color = d3.scaleOrdinal(d3.schemeCategory10).domain(["2", "1", "3", "4"]);
+        self.color = d3.scaleOrdinal(d3.schemeCategory10).domain(["5", "1", "3", "4"]);
 
         self.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(function (d) {
@@ -89,10 +90,14 @@ var ForceDirected = (function () {
                         return d.y;
                     };
                 }).remove();
-            //exit circles
+            //remove decorations
+            //remove circles
             self.svg.selectAll("circle").remove();
             self.svg.selectAll("text").remove();
             self.svg.selectAll("title").remove();
+            // remove edgepaths
+            self.svg.selectAll(".edgepath").remove();
+            self.svg.selectAll(".edgelabel").remove();
 
             //enter
             var newNode = self.node.enter().append("g").attr("class", "node").on("click", function (d) {
@@ -148,6 +153,7 @@ var ForceDirected = (function () {
                 .attr("stroke-opacity", 0).remove();
 
             //enter
+            self.link = self.link.data(g.links)
             var rootlink = self.link.enter();
 
 
@@ -155,7 +161,7 @@ var ForceDirected = (function () {
                 .attr("class", "link")
                 .attr("stroke", function (d) {
                     if (d.type == 2) //household edge
-                        return "#00E0D2"
+                        return "#ffeafb";
                     else
                         return "#C4CDCE";
                 })
@@ -173,9 +179,8 @@ var ForceDirected = (function () {
                 .attr('id', function (d, i) {
                     return 'edgepath' + i
                 })
-                .attr('d', function (d) {
-                })
                 .style("pointer-events", "none");
+
             self.svg.selectAll(".edgepath")
                 .data(g.links.filter(function (d) {
                     return d.type == 2;
@@ -185,7 +190,7 @@ var ForceDirected = (function () {
                 .data(g.links.filter(function (d) {
                     return d.type == 2;
                 }));
-            self.edgelabels.exit()
+            self.edgelabels.exit().remove();
             self.edgelabels.enter()
                 .append('text')
                 .style("pointer-events", "none")
@@ -198,7 +203,7 @@ var ForceDirected = (function () {
                     return '#edgepath' + i
                 })
                 .attr('font-size', 10)
-                .attr('fill', '#000000')
+                .attr('fill', '#ffffff')
                 .style("text-anchor", "middle")
                 .attr("startOffset", "50%")
                 .style("pointer-events", "none")
@@ -237,6 +242,8 @@ var ForceDirected = (function () {
                 })
                 .style("font-family", "sans-serif")
                 .style("font-size", "5px")
+                .attr('fill', '#ffffff')
+                .attr("font-weight", "bold")
                 .attr('x', 6)
                 .attr('y', 3);
 
@@ -487,9 +494,9 @@ var ForceDirected = (function () {
         //Creating the button
         d3.select("body")
             .append("div")
-            .attr("class", "fdg-button")
+            .attr("class", "button-set")
 
-        var findHousehold = d3.select(".fdg-button")
+        var findHousehold = d3.select(".button-set")
             .append("input")
             .attr("type", "button")
             .attr("value", "Derive HouseHold");
@@ -518,7 +525,7 @@ var ForceDirected = (function () {
 
 
         });
-        var detachHousehold = d3.select(".fdg-button")
+        var detachHousehold = d3.select(".button-set")
             .append("input")
             .attr("type", "button")
             .attr("value", "Return")
@@ -532,27 +539,7 @@ var ForceDirected = (function () {
                     restart();
                 });
             });
-        var cancel = d3.select(".fdg-button")
-            .append("input")
-            .attr("type", "button")
-            .attr("value", "Cancel")
-            .on("click", function () {
-                $("#header").animate({
-                    opacity: 1,
-                    height: "toggle"
-                }, 3000, function () {
-                });
-                $("svg").animate({
-                    height: "toggle"
-                }, 3000, function () {
-                    $("svg").remove();
-                });
-                $(".fdg-button").animate({
-                    height: "toggle"
-                }, 3000, function () {
-                    $(".fdg-button").remove();
-                });
-            })
+
 
     }
     return ForceDirected;
