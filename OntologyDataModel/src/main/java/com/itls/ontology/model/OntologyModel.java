@@ -132,14 +132,20 @@ public class OntologyModel {
 
     public void hideMMD(List<String> typeList) {
         getDataSet().stream()
-                .filter(ontData -> typeList.stream().anyMatch(type -> ontData.getOntMetaData().getName().equals(type)))
+                .filter(ontData -> typeList.stream()
+                        .anyMatch(type -> ontData.getOntMetaData()
+                                .getName()
+                                .equals(type)))
                 .forEach(ontData -> ontData.setVisibility(Visibility.OFF));
     }
 
     public void showMMD(List<String> typeList) {
         hideAllMMD();
         getDataSet().stream()
-                .filter(ontData -> typeList.stream().anyMatch(type -> ontData.getOntMetaData().getName().equals(type)))
+                .filter(ontData -> typeList.stream()
+                        .anyMatch(type -> ontData.getOntMetaData()
+                                .getName()
+                                .equals(type)))
                 .forEach(ontData -> ontData.setVisibility(Visibility.ON));
     }
 
@@ -150,8 +156,9 @@ public class OntologyModel {
         List<OntData> keys = getKeys();
         //build keys, relatesTo objects for combined model
         //find matching key entries and populate both ways, then deduplicate the entire dataset
-        HashMap<String, ArrayList<OntData>> keysMap = keys.stream().collect(
-                Collectors.groupingBy(OntData::getContents, HashMap::new, Collectors.toCollection(ArrayList::new)));
+        HashMap<String, ArrayList<OntData>> keysMap = keys.stream()
+                .collect(
+                        Collectors.groupingBy(OntData::getContents, HashMap::new, Collectors.toCollection(ArrayList::new)));
         logger.info("Entering Key refreshment for following key set: keys are " + keysMap.keySet());
         keysMap.forEach((String a, ArrayList<OntData> b) -> relatesData(b));
         logger.info("Exiting Key refreshment");
@@ -164,8 +171,11 @@ public class OntologyModel {
      * @param a
      */
     private void refreshOntDataSet(ArrayList<OntData> a) {
-        getDataSet().addAll(a.stream().
-                flatMap(b -> b.getRelatesToObjs().stream()).collect(Collectors.toList()));
+        getDataSet().addAll(a.stream()
+                .
+                        flatMap(b -> b.getRelatesToObjs()
+                                .stream())
+                .collect(Collectors.toList()));
 
     }
 
@@ -202,9 +212,11 @@ public class OntologyModel {
                     .filter(distinctByKeyAll(k -> new StringBuffer()
                             .append(k.getKeyValue())
                             .append(".")
-                            .append(k.getOntMetaData().getName())
+                            .append(k.getOntMetaData()
+                                    .getName())
                             .append(".")
-                            .append(k.getContents()).toString()))
+                            .append(k.getContents())
+                            .toString()))
                     .collect(Collectors.toList());
             setDataSet((ArrayList<OntData>) re);
 
@@ -223,7 +235,7 @@ public class OntologyModel {
 
     private static <T> Predicate<T> distinctByKeyAll(Function<? super T, Object> keyExtractor) {
         Map<Object, Boolean> map = new ConcurrentHashMap<>();
-        // distinct applies to key elements only, leaving all non-key elements
+        // distinct applies to all elements
         return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
@@ -246,6 +258,35 @@ public class OntologyModel {
         dataSet.removeAll(l);
     }
 
+
+    public void relatesData2(ArrayList<OntData> aList) {
+        ArrayList<OntData> values = new ArrayList<>();
+        aList.stream()
+                .forEach(ontData -> values.addAll(ontData.getRelatesToObjs()));
+        ArrayList<OntData> values2 = (ArrayList<OntData>) values.stream()
+                .filter(ontData -> ontData.getOntMetaData()
+                        .getName()
+                        .equals("Category") || ontData.getOntMetaData()
+                        .getName()
+                        .equals("Amount") || ontData.getOntMetaData()
+                        .getName()
+                        .equals("Propensity") ||
+                        ontData.getOntMetaData()
+                                .getName()
+                                .equals("Product")
+                )
+                .collect(Collectors.toList());
+        //  values2.forEach(OntData::removeAllRelatesToData);
+        relatesRelatesToData(values2);
+        //no need to add key back to each key relatesTo objects
+        //        flattenList.addAll(aList);
+
+        //    relatesRelatesToData((ArrayList<OntData>) flattenList);
+//        flattenList.stream().forEach(ontData -> aList.stream()
+//                .filter(innerd -> !innerd.equals(ontData))
+//                .forEach(innerd -> innerd.relatesTo(ontData)));
+    }
+
     /**
      * create relateTo list for all OntData in aList which should be row data list
      *
@@ -254,38 +295,13 @@ public class OntologyModel {
     public void relatesData(ArrayList<OntData> aList) {
         //should not flatALl, as we are not re-associating the original relatesTo data again
         //[577-48-3829, 577-48-3829, 577-48-3829, 577-48-3829]
-        // List<OntData> flattenList = aList.stream().flatMap(ontData -> ontData.getRelatesToObjs().stream()).collect(Collectors.toList());
-//        for (int i = 0; i < aList.size(); i++) {
-//            for (int j = i + 1; j < aList.size(); j++) {
-//                ArrayList<OntData> a = new ArrayList<>();
-//                OntData keyOntData1 = aList.get(i);
-//                a.add(keyOntData1);
-//
-//                ArrayList<OntData> b = new ArrayList<>(keyOntData1
-//                        .getRelatesToObjs());
-//                ArrayList<OntData> c = new ArrayList<>();
-//                c.add(aList.get(j));
-//                ArrayList<OntData> d = new ArrayList<>(aList.get(j).getRelatesToObjs());
-//                relatesRelatesToDataFromPair(a, d);
-//                relatesRelatesToDataFromPair(c, b);
-//                relatesRelatesToDataFromPair(b, d);
-//            }
-//        }
-        ArrayList<OntData> newList = new ArrayList<>();
+        ArrayList<OntData> values = new ArrayList<>();
         aList.stream()
-                .forEach(ontData -> {
-                    newList.add(ontData);
-                    ontData.getRelatesToObjs()
-                            .forEach(ontData1 -> newList.add(ontData1));
-                });
-        newList.forEach(OntData::removeAllRelatesToData);
-        relatesRelatesToData(newList);
-//         aList.stream().forEach(ontData -> aList.stream()
-//                                .filter(innered -> !(innered == ontData))
-//                                .forEach(innerd -> {ArrayList<OntData> a = new ArrayList<>();
-//                                                                        a.add(ontData);
-//                                                                        a.addAll(ontData.getRelatesToObjs());
-//                                                                        relatesRelatesToDataFromPair(a, ontData.getRelatesToObjs());}));
+                .forEach(ontData -> values.addAll(ontData.getRelatesToObjs()));
+        // values.forEach(OntData::removeAllRelatesToData);
+        aList.forEach(OntData::removeAllRelatesToData);
+        //   relatesRelatesToData(values);
+        relatesRelatesToDataFromPair(aList, values);
         //no need to add key back to each key relatesTo objects
         //        flattenList.addAll(aList);
 
@@ -335,7 +351,8 @@ public class OntologyModel {
     public void refreshDataToMetaDataMap() {
         if (getDataSet() != null) {
             this.dataMap = dataSet.stream()
-                    .collect(Collectors.groupingBy(ontdata -> ontdata.getOntMetaData().getName()));
+                    .collect(Collectors.groupingBy(ontdata -> ontdata.getOntMetaData()
+                            .getName()));
 
         }
     }

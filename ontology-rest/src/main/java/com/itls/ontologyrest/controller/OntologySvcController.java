@@ -2,10 +2,7 @@ package com.itls.ontologyrest.controller;
 
 import com.itls.ontologyrest.service.OntologyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -40,11 +37,12 @@ public class OntologySvcController {
         return ontologyService.getCirclePackingJSON();
     }
 
-    @RequestMapping("/fdg")
+    @GetMapping("/fdg")
     public String getFDGJSON(@RequestParam(required = false) String type) {
-        if (type != null && type.toLowerCase().equals("household"))
+        if (type != null && type.toLowerCase()
+                .equals("household")) {
             return ontologyService.getHouseHoldFDG();
-        else
+        } else
             return ontologyService.getFDGJSON();
     }
 }

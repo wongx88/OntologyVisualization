@@ -42,19 +42,19 @@ public class OntologyService implements IOntologyService {
     private static void setupDemo() throws IOException {
         OntologyModelFactory mf = new OntologyModelFactory();
 
-        cust = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06-updatedbyTera-coloredonly.csv");
+        cust = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06-updatedbyTera-coloredonly-forP2B.csv");
         cust_all = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06.csv");
-        buysell = ResourceUtils.getFile("classpath:dataset/PropensityToBuyScore_15_04_2020-coloredonly.csv");
+        buysell = ResourceUtils.getFile("classpath:dataset/PropensityToBuyScore_15_04_2020-coloredonly-forP2B.csv");
         hh = ResourceUtils.getFile("classpath:dataset/HH_identification_Score_2020-04_12-coloredonly.csv");
         ontologyModel = mf.createModel(cust.toPath(), 15000, "SSN");
         //1. always hide metadata before deduplication
         ontologyModel.hideAllMMD();
-        //2.
+//        //2. re associate dup keys on customer data set
         ontologyModel.refreshKeysNValues();
-        //3. dedup customer data rows
+////        //3. dedup customer data rows
         ontologyModel.deduplicateDataset();
         //4. create buysell model
-        ontologyModel2 = mf.createModel(buysell.toPath(), 10000, 0);
+        ontologyModel2 = mf.createModel(buysell.toPath(), 10000, "SSN");
         ontologyModel2.hideAllMMD();
         //5. right join buysell with customer data
 
@@ -65,13 +65,9 @@ public class OntologyService implements IOntologyService {
         // ontologyModel = getOntologyModel();
     }
 
-//
-//    public getCustomerbySSN(String SSN){
-//        ontologyModel.getDataSet().forEach();
-//        return ontologyModel.toFDGJSON(true);
-//    }
-
-
+    /**
+     * @return Build Restful CSV response
+     */
     public String getCustomerCSV() {
         StringBuilder contentBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(cust_all))) {
@@ -88,7 +84,7 @@ public class OntologyService implements IOntologyService {
     }
 
     /**
-     * @return HEB
+     * @return HEB of entire dataset
      */
     @Override
     public String getHEBJSON() {
@@ -101,6 +97,10 @@ public class OntologyService implements IOntologyService {
         return model.toHEBJSON();
     }
 
+    /**
+     * @param SSN used by filter by SSN to show only single customer HEB
+     * @return
+     */
     public String getHEBJSON(String SSN) {
         if (null == ontologyModel) return EMPTY_JSON;
         OntologyModel model = new OntologyModel();
