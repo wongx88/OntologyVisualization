@@ -20,15 +20,30 @@
 
 <body>
 <div id="header">
-    <p>
-        <label><input type="radio" name="vis" value="ForceDirected">ForceDirected</label>
-        <label><input type="radio" name="vis" value="EdgeBundling">EdgeBundling</label>
-        <label><input type="radio" name="vis" value="HeatMap#1">HeatMap#1</label>
-        <label><input type="radio" name="vis" value="HeatMap#2">HeatMap#2</label>
-        <label><input type="radio" name="vis" value="HeatMap#3">HeatMap#3</label>
-        <label><input type="radio" name="vis" value="CirclePacking">CirclePacking</label>
+    
+	<p>
+        <label><input type="radio" name="vis" value="HeatMap#1">Transaction Amount</label>
+        <label><input type="radio" name="vis" value="HeatMap#3">Transaction Volume</label>
+        <label><input type="radio" name="vis" value="HeatMap#2">Average Household Size</label>
+        <label><input type="radio" name="vis" value="ForceDirected">Customer View</label>
+        <label><input type="radio" name="vis" value="EdgeBundling">Propensity to buy</label>
+        <!--  label><input type="radio" name="vis" value="CirclePacking">CirclePacking</label -->
     </p>
     <p><input type="button" id="visual-1" value="Visualize"></p>
+	<p><input type="button" onclick="location.href='household.PNG'; target='_blank'" value="Household" /></p>
+	<p><input type="button" onclick="location.href='nextbestaction.PNG'; target='_blank'" value="Next Best Action" /></p>
+	<p/>
+	<p/>
+<p><input type="button" onclick="location.href='demo.PNG'; target='_blank'" value="Demo Overview" /></p>
+<p><input type="button" onclick="location.href='http://localhost:6001/'; target='_blank'" value="Apply for a credit card" /></p>
+
+	
+	
+
+  
+</a>
+
+
 </div>
 
 </body>
