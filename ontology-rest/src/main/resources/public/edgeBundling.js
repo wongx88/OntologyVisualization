@@ -1,7 +1,7 @@
 var EdgeBundling = (function () {
 
 
-    function EdgeBundling(data, elem, width = 975, height = 610, radius = 477) {
+    function EdgeBundling(data, elem, width = 1200, height = 610, radius = 477) {
         this.width = width;
         this.height = height;
         this.data = data;
@@ -74,7 +74,8 @@ var EdgeBundling = (function () {
 
         //975 610
         self.svg = d3.create("svg")
-            .attr("viewBox", [-self.width / 2, -self.width / 2, self.width, self.width]);
+            //.attr("viewBox", [-self.width / 2, -self.width / 2, self.width, self.width]);
+        .attr("viewBox", [-self.width , -self.width / 2, self.width * 2, self.width]);
 
         this.tree = d3.cluster()
             .size([2 * Math.PI, self.radius - 100]);
