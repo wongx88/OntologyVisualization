@@ -50,7 +50,7 @@ public class OntologyService implements IOntologyService {
         cust = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06-updatedbyTera-coloredonly.csv");
         cust_all = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06.csv");
         buysell = ResourceUtils.getFile("classpath:dataset/PropensityToBuyScore_15_04_2020-coloredonly.csv");
-        hh = ResourceUtils.getFile("classpath:dataset/HH_identification_Score_2020-04_12-coloredonly3.csv");
+        hh = ResourceUtils.getFile("classpath:dataset/HH_identification_Score_2020-04_12-coloredonly.csv");
         ontologyModel = mf.createModel(cust.toPath(), 15000, "SSN");
         //1. always hide metadata before deduplication
         ontologyModel.hideAllMMD();
