@@ -13,18 +13,18 @@
 var renderPage = function (type) {
 
     if (type == "ForceDirected")
-        new ForceDirected(width = 1200, height = 950);
+        new ForceDirected(width = 575, height = 225);
     else if (type == "EdgeBundling") {
         new EdgeBundling();
     } else if (type == "HeatMap#1") {
         new BubbleMap();
-        $(".title").append($("<h1>Group By Amount</h1>"));
+        $(".title").append($("<h1>Transaction Amount</h1>"));
     } else if (type == "HeatMap#2") {
         new BubbleMap_2();
-        $(".title").append($("<h1>Group By Household Size</h1>"));
+        $(".title").append($("<h1>Average Household Size</h1>"));
     } else if (type == "HeatMap#3") {
         new BubbleMap_3();
-        $(".title").append($("<h1>Group By total number of Transaction</h1>"));
+        $(".title").append($("<h1>Transaction Volume</h1>"));
     } else
         new CirclePacking();
 };
