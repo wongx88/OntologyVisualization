@@ -41,11 +41,16 @@ public class OntologyService implements IOntologyService {
      */
     private static void setupDemo() throws IOException {
         OntologyModelFactory mf = new OntologyModelFactory();
-
+        //cust = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06-only.csv");
+        //buysell = ResourceUtils.getFile("classpath:dataset/PropensityToBuyScore_9_04_2020-only.csv");
+        //hh = ResourceUtils.getFile("classpath:dataset/HH_Identification_score_09_04_2020-only.csv");
+        //cust = ResourceUtils.getFile("classpath:dataset/corbin family.csv");
+        //buysell = ResourceUtils.getFile("classpath:dataset/corbin family - P2B.csv");
+        //hh = ResourceUtils.getFile("classpath:dataset/corbin family - HH.csv");
         cust = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06-updatedbyTera-coloredonly.csv");
         cust_all = ResourceUtils.getFile("classpath:dataset/Customer_Transaction_Data_2020-04-06.csv");
         buysell = ResourceUtils.getFile("classpath:dataset/PropensityToBuyScore_15_04_2020-coloredonly.csv");
-        hh = ResourceUtils.getFile("classpath:dataset/HH_identification_Score_2020-04_12-coloredonly.csv");
+        hh = ResourceUtils.getFile("classpath:dataset/HH_identification_Score_2020-04_12-coloredonly3.csv");
         ontologyModel = mf.createModel(cust.toPath(), 15000, "SSN");
         //1. always hide metadata before deduplication
         ontologyModel.hideAllMMD();
@@ -94,7 +99,8 @@ public class OntologyService implements IOntologyService {
     public String getHEBJSON() {
         if (null == ontologyModel) return EMPTY_JSON;
         OntologyModel model = ontologyModel;
-        String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age", "Marital Status", "Residential_Street Address", "Item", "Propensity", "Product"};
+        //String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age", "Marital Status", "Residential_Street Address", "Item", "Propensity"};
+        String[] showList = {"First Name", "Last Name", "Gender", "Age", "Marital Status", "Amount", "Product", "Item", "Propensity"};
         //  String[] showList = {"SSN","First Name","Last Name","Item"};
         model.showMMD(Arrays.asList(showList));
         model.deduplicateDataset();
@@ -106,7 +112,9 @@ public class OntologyService implements IOntologyService {
         OntologyModel model = new OntologyModel();
         model.hideAllMMD();
         model.addAllOntData(ontologyModel.filterByKey(SSN));
-        String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age", "Marital Status", "Residential_Street Address", "Item", "Propensity"};
+        //String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age", "Marital Status", "Residential_Street Address", "Item", "Propensity"};
+        String[] showList = {"First Name", "Last Name", "Gender", "Age", "Marital Status", "Amount", "Product", "Item", "Propensity"};
+        //String[] showList = {"First Name", "Last Name", "Gender", "Age", "Marital Status", "Item", "Propensity"};
         model.showMMD(Arrays.asList(showList));
         model.deduplicateDataset();
         return model.toHEBJSON();
@@ -118,7 +126,8 @@ public class OntologyService implements IOntologyService {
     public String getFDGJSON() {
         if (null != ontologyModel) {
             ontologyModel.detachAllOntRels();
-            String[] showList = {"SSN", "First Name", "Last Name", "Item", "Propensity", "Residential_Street Address"};
+            //String[] showList = {"SSN", "First Name", "Last Name", "Item", "Propensity"};
+            String[] showList = {"SSN", "First Name", "Last Name"};
             // String[] showList = {"SSN","First Name","Last Name","Gender", "Age","Marital Status", "Residential_Street Address","Item","Propensity"};
             ontologyModel.showMMD(Arrays.asList(showList));
             return ontologyModel.toFDGJSON(true);
@@ -132,7 +141,8 @@ public class OntologyService implements IOntologyService {
     public String getHouseHoldFDG() {
         if (null == ontologyModel) return EMPTY_JSON;
         ontologyModel.detachAllOntRels();
-        String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age", "Marital Status", "Residential_Street Address", "Item"};
+        //String[] showList = {"SSN", "First Name", "Last Name", "Item", "Propensity"};
+        String[] showList = {"SSN", "First Name", "Last Name", "Gender", "Age","Marital Status", "Residential_Street Address"};
         // String[] showList = {"SSN","First Name","Last Name","Gender", "Age","Marital Status", "Residential_Street Address"};
         ontologyModel.showMMD(Arrays.asList(showList));
         ontologyModel.deduplicateDataset();
